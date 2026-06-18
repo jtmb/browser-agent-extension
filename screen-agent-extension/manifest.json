@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Screen Agent",
+  "version": "1.0.0",
+  "description": "Chat with an LLM agent that sees and interacts with your screen via LM Studio.",
+  "permissions": [
+    "sidePanel",
+    "debugger",
+    "storage",
+    "activeTab",
+    "tabs",
+    "downloads"
+  ],
+  "host_permissions": [
+    "http://192.168.0.13:1234/*",
+    "http://localhost:1234/*",
+    "http://127.0.0.1:1234/*",
+    "http://127.0.0.1:9999/*",
+
+    "https://api.duckduckgo.com/*",
+    "https://html.duckduckgo.com/*"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "background": {
+    "service_worker": "background.bundle.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Open Screen Agent",
+    "default_icon": {
+      "128": "icons/icon-128.png"
+    }
+  },
+  "externally_connectable": {
+    "matches": [
+      "http://localhost:*/*",
+      "http://127.0.0.1:*/*"
+    ]
+  },
+  "icons": {
+    "128": "icons/icon-128.png"
+  }
+}

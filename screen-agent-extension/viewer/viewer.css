@@ -1,0 +1,408 @@
+/* ── File Viewer ────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #1a1a2e;
+  --bg-panel: #16213e;
+  --bg-hover: #1f2f50;
+  --bg-active: #253a5e;
+  --text: #e0e0e0;
+  --text-muted: #8892a4;
+  --accent: #0fb5b6;
+  --accent-hover: #0d9d9e;
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --border: #2a3a5c;
+  --radius: 6px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Split layout ──────────────────────────────────────────────────────────── */
+
+.viewer-split {
+  display: flex;
+  height: 100vh;
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+
+.viewer-sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.viewer-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 16px 8px;
+}
+
+.viewer-sidebar-header h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.viewer-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+#refresh-btn {
+  margin: 0 12px 12px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* ── File List ─────────────────────────────────────────────────────────────── */
+
+.viewer-file-list {
+  list-style: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px;
+}
+
+.viewer-empty {
+  padding: 24px 8px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.viewer-file-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+  transition: background 0.15s;
+}
+
+.viewer-file-item:hover {
+  background: var(--bg-hover);
+}
+
+.viewer-file-item.active {
+  background: var(--bg-active);
+  color: var(--accent);
+}
+
+.viewer-file-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.viewer-file-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewer-file-size {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Sidebar Footer ────────────────────────────────────────────────────────── */
+
+.viewer-sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Main Content ──────────────────────────────────────────────────────────── */
+
+.viewer-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.viewer-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.viewer-placeholder-icon {
+  font-size: 48px;
+  opacity: 0.4;
+}
+
+.viewer-placeholder-hint {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* ── Content Pane ──────────────────────────────────────────────────────────── */
+
+.viewer-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.viewer-toolbar h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewer-toolbar-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.viewer-meta {
+  display: flex;
+  gap: 16px;
+  padding: 6px 20px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.viewer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  margin: 0;
+}
+
+/* Table view — remove monospace, add scrolling */
+.viewer-body-table {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  white-space: normal;
+  padding: 0;
+}
+
+/* Rendered markdown */
+.viewer-body-rendered {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  white-space: normal;
+}
+
+.viewer-body-rendered h1, .viewer-body-rendered h2, .viewer-body-rendered h3,
+.viewer-body-rendered h4, .viewer-body-rendered h5, .viewer-body-rendered h6 {
+  margin: 16px 0 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.viewer-body-rendered h1 { font-size: 1.4em; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.viewer-body-rendered h2 { font-size: 1.25em; }
+.viewer-body-rendered h3 { font-size: 1.1em; }
+
+.viewer-body-rendered p { margin-bottom: 10px; }
+
+.viewer-body-rendered ul, .viewer-body-rendered ol {
+  margin: 6px 0;
+  padding-left: 24px;
+}
+
+.viewer-body-rendered li { margin-bottom: 4px; }
+
+.viewer-body-rendered blockquote {
+  margin: 10px 0;
+  padding: 8px 16px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg);
+  border-radius: 0 6px 6px 0;
+  color: var(--text-muted);
+}
+
+.viewer-body-rendered a { color: var(--accent); text-decoration: none; }
+.viewer-body-rendered a:hover { text-decoration: underline; }
+
+.viewer-body-rendered code {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  background: var(--bg);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.viewer-body-rendered pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+
+.viewer-body-rendered pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.viewer-body-rendered hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.viewer-body-rendered img {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+/* ── Table wrapper ──────────────────────────────────────────────────────────── */
+
+.viewer-table-wrap {
+  overflow-x: auto;
+  padding: 0 20px;
+}
+
+.viewer-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  width: max-content;
+  min-width: 100%;
+  margin: 16px 0 8px;
+}
+
+.viewer-table th {
+  background: var(--bg-active);
+  color: var(--text);
+  font-weight: 600;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.viewer-table td {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.viewer-table tr:nth-child(even) td {
+  background: var(--bg);
+}
+
+.viewer-table tr:hover td {
+  background: var(--bg-hover);
+}
+
+.viewer-table-info {
+  padding: 0 20px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+
+.viewer-btn {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.viewer-btn:hover {
+  background: var(--bg-hover);
+}
+
+.viewer-btn-danger {
+  color: var(--danger);
+}
+
+.viewer-btn-danger:hover {
+  background: var(--danger-hover);
+  color: #fff;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+
+.viewer-file-list::-webkit-scrollbar,
+.viewer-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.viewer-file-list::-webkit-scrollbar-track,
+.viewer-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.viewer-file-list::-webkit-scrollbar-thumb,
+.viewer-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.viewer-file-list::-webkit-scrollbar-thumb:hover,
+.viewer-body::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

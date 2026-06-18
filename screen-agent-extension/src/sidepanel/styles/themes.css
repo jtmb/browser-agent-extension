@@ -1,0 +1,102 @@
+/**
+ * Theme definitions for the Screen Agent side panel.
+ *
+ * Design tokens follow a dark minimal aesthetic inspired by OpenWeb UI:
+ * - No bright blues — uses warm grays, muted teal accents
+ * - OLED theme goes full black with reduced contrast for OLED displays
+ * - System theme follows OS dark/light preference
+ */
+
+/* ── Dark Theme (default) ───────────────────────────────────────────────── */
+:root,
+.theme-dark {
+  /* Surface */
+  --bg-primary: #1a1a1e;
+  --bg-secondary: #212126;
+  --bg-tertiary: #2a2a30;
+  --bg-hover: #2f2f36;
+
+  /* Text */
+  --text-primary: #e4e4e7;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+
+  /* Accents — muted teal/gray, NO blue */
+  --accent: #5eead4;
+  --accent-hover: #2dd4bf;
+  --accent-muted: rgba(94, 234, 212, 0.1);
+
+  /* Messages */
+  --msg-user-bg: #2d2d35;
+  --msg-user-text: #e4e4e7;
+  --msg-assistant-bg: transparent;
+  --msg-assistant-text: #e4e4e7;
+
+  /* Code */
+  --code-bg: #111118;
+  --code-text: #a5d6a7;
+  --code-border: #333;
+
+  /* Tool calls */
+  --tool-bg: #1e2a1e;
+  --tool-text: #a5d6a7;
+  --tool-border: #2d4a2d;
+  --tool-err-bg: #2a1e1e;
+  --tool-err-text: #ef9a9a;
+  --tool-err-border: #4a2d2d;
+
+  /* Input */
+  --input-bg: #212126;
+  --input-border: #333;
+  --input-focus-border: #52525b;
+  --input-placeholder: #71717a;
+
+  /* Misc */
+  --border: #333;
+  --error: #ef5350;
+  --warning: #ffb74d;
+  --success: #66bb6a;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Light Theme ──────────────────────────────────────────────────────────── */
+.theme-light {
+  --bg-primary: #fafafa;
+  --bg-secondary: #f4f4f5;
+  --bg-tertiary: #e4e4e7;
+  --bg-hover: #d4d4d8;
+
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+
+  --msg-user-bg: #e4e4e7;
+  --msg-user-text: #18181b;
+  --msg-assistant-bg: transparent;
+  --msg-assistant-text: #18181b;
+
+  --code-bg: #f4f4f5;
+  --code-text: #0d9488;
+  --code-border: #d4d4d8;
+
+  --tool-bg: #dcfce7;
+  --tool-text: #166534;
+  --tool-border: #bbf7d0;
+  --tool-err-bg: #fee2e2;
+  --tool-err-text: #991b1b;
+  --tool-err-border: #fecaca;
+
+  --input-bg: #f4f4f5;
+  --input-border: #d4d4d8;
+  --input-focus-border: #a1a1aa;
+  --input-placeholder: #a1a1aa;
+
+  --border: #d4d4d8;
+  --error: #dc2626;
+  --warning: #d97706;
+  --success: #16a34a;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

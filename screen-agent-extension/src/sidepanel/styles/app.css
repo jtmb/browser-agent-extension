@@ -1,0 +1,1443 @@
+/**
+ * Screen Agent — Side Panel Styles
+ *
+ * OpenWeb UI-inspired dark minimal design.
+ * Uses CSS custom properties from themes.css for all colors.
+ * The side panel is fully fluid — Chrome controls the panel width,
+ * and all components use 100% of available space.
+ */
+
+/* ── Reset & Base ────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ── App Shell ───────────────────────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 10px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.app-logo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.app-header-spacer {
+  flex: 1;
+}
+
+/* ── Generic header icon button (theme toggle, settings gear) ──────────── */
+.header-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.header-icon-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* ── Theme Toggle ────────────────────────────────────────────────────────── */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--accent);
+  background: var(--bg-hover);
+}
+
+/* ── Model Selector (header dropdown) ───────────────────────────────────── */
+.model-selector {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.model-select-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.model-select-trigger:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.model-select-name {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.model-select-chevron {
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+
+.model-select-chevron.open {
+  transform: rotate(180deg);
+}
+
+.model-select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 240px;
+  max-height: 280px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.model-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.model-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.model-refresh-btn:hover {
+  color: var(--accent);
+}
+
+.model-dropdown-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.model-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.model-dropdown-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.model-dropdown-item.active {
+  color: var(--accent);
+}
+
+.model-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-dropdown-empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Chat Window ─────────────────────────────────────────────────────────── */
+/* ── Chat Window ─────────────────────────────────────────────────────────── */
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  position: relative; /* anchor for the context gauge */
+}
+
+/* ── Message Area ────────────────────────────────────────────────────────── */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 12px 4px;
+  scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* ── Context Window Gauge (fixed bottom-right, outside scroll area) ──────── */
+.chat-context-gauge {
+  position: absolute;
+  bottom: 68px; /* above the input bar */
+  right: 12px;
+  z-index: 10;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.chat-context-gauge:hover {
+  opacity: 1;
+}
+
+/* ── Context Gauge Tooltip ───────────────────────────────────────────────── */
+.chat-context-gauge-tooltip {
+  position: absolute;
+  bottom: 44px;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  min-width: 200px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+  cursor: default;
+}
+
+.gauge-tooltip-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gauge-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.gauge-tooltip-row span:last-child {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.gauge-tooltip-bar-track {
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  margin-top: 8px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.gauge-tooltip-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.gauge-tooltip-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ── Empty State ─────────────────────────────────────────────────────────── */
+.chat-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  text-align: center;
+  padding: 24px;
+}
+
+.chat-empty-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.chat-empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.chat-empty-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+/* ── Message Row ─────────────────────────────────────────────────────────── */
+.msg-row {
+  display: flex;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.msg-row-user {
+  justify-content: flex-end;
+}
+
+.msg-row-assistant {
+  justify-content: flex-start;
+}
+
+/* ── Message Bubble ──────────────────────────────────────────────────────── */
+.msg {
+  max-width: 92%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.55;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* User message — subtle fill, right aligned */
+.msg-user {
+  background: var(--msg-user-bg);
+  color: var(--msg-user-text);
+  border-bottom-right-radius: 4px;
+}
+
+/* Assistant message — transparent, left aligned */
+.msg-assistant {
+  background: var(--msg-assistant-bg);
+  color: var(--msg-assistant-text);
+  border-bottom-left-radius: 4px;
+  padding-left: 0;
+}
+
+/* ── Reasoning (inline italic, with Thinking…/Done label) ────────────────── */
+
+.msg-reasoning {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+.msg-reasoning-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.msg-reasoning .reasoning-inline-cursor {
+  color: var(--accent);
+  animation: reasoning-blink 1s step-end infinite;
+}
+
+@keyframes reasoning-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Live reasoning stream in the message list (during loading — replaces dots) */
+.chat-reasoning-stream {
+  padding: 0 16px 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0.85;
+}
+
+.chat-reasoning-stream-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.chat-reasoning-stream .reasoning-cursor {
+  color: var(--accent);
+  animation: reasoning-blink 1s step-end infinite;
+}
+
+/* ── Message Content (full GFM markdown) ────────────────────────────────── */
+.msg-content {
+  word-break: break-word;
+}
+
+.msg-content p {
+  margin-bottom: 6px;
+}
+
+.msg-content p:last-child {
+  margin-bottom: 0;
+}
+
+.msg-content h1, .msg-content h2, .msg-content h3,
+.msg-content h4, .msg-content h5, .msg-content h6 {
+  margin: 10px 0 6px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.msg-content h1 { font-size: 1.25em; }
+.msg-content h2 { font-size: 1.15em; }
+.msg-content h3 { font-size: 1.05em; }
+
+.msg-content ul, .msg-content ol {
+  margin: 6px 0;
+  padding-left: 20px;
+}
+
+.msg-content li {
+  margin-bottom: 2px;
+}
+
+.msg-content li > ul, .msg-content li > ol {
+  margin: 2px 0;
+}
+
+.msg-content blockquote {
+  margin: 8px 0;
+  padding: 4px 12px;
+  border-left: 3px solid var(--accent);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-radius: 0 6px 6px 0;
+}
+
+.msg-content table {
+  margin: 8px 0;
+  border-collapse: collapse;
+  font-size: 12px;
+  width: 100%;
+}
+
+.msg-content th {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.msg-content td {
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+}
+
+.msg-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+}
+
+.msg-content a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.msg-content a:hover {
+  text-decoration: underline;
+}
+
+.msg-content code {
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
+  font-size: 12px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--code-border);
+}
+
+.msg-content pre {
+  margin: 8px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--code-border);
+}
+
+.msg-content pre code {
+  display: block;
+  padding: 10px 12px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: none;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.msg-content strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.msg-content em {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.msg-content img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.msg-content input[type="checkbox"] {
+  margin-right: 4px;
+  accent-color: var(--accent);
+}
+
+/* ── Highlight.js theme (github-dark) ───────────────────────────────────── */
+.msg-content .hljs {
+  color: #c9d1d9;
+  background: var(--code-bg);
+}
+
+.msg-content .hljs-doctag,
+.msg-content .hljs-keyword,
+.msg-content .hljs-meta .hljs-keyword,
+.msg-content .hljs-template-tag,
+.msg-content .hljs-template-variable,
+.msg-content .hljs-type,
+.msg-content .hljs-variable.language_ { color: #ff7b72; }
+
+.msg-content .hljs-title,
+.msg-content .hljs-title.class_,
+.msg-content .hljs-title.class_.inherited__,
+.msg-content .hljs-title.function_ { color: #d2a8ff; }
+
+.msg-content .hljs-attr,
+.msg-content .hljs-attribute,
+.msg-content .hljs-literal,
+.msg-content .hljs-meta,
+.msg-content .hljs-number,
+.msg-content .hljs-operator,
+.msg-content .hljs-selector-attr,
+.msg-content .hljs-selector-class,
+.msg-content .hljs-selector-id,
+.msg-content .hljs-variable { color: #79c0ff; }
+
+.msg-content .hljs-meta .hljs-string,
+.msg-content .hljs-regexp,
+.msg-content .hljs-string { color: #a5d6ff; }
+
+.msg-content .hljs-built_in,
+.msg-content .hljs-symbol { color: #ffa657; }
+
+.msg-content .hljs-code,
+.msg-content .hljs-comment,
+.msg-content .hljs-formula { color: #8b949e; }
+
+.msg-content .hljs-name,
+.msg-content .hljs-quote,
+.msg-content .hljs-selector-pseudo,
+.msg-content .hljs-selector-tag { color: #7ee787; }
+
+.msg-content .hljs-subst { color: #c9d1d9; }
+
+.msg-content .hljs-section { color: #1f6feb; font-weight: 700; }
+
+.msg-content .hljs-bullet { color: #f2cc60; }
+
+.msg-content .hljs-emphasis { font-style: italic; }
+
+.msg-content .hljs-strong { font-weight: 700; }
+
+.msg-content .hljs-addition { color: #aff5b4; background-color: rgba(3, 102, 214, 0.1); }
+
+.msg-content .hljs-deletion { color: #ffdcd7; background-color: rgba(218, 54, 51, 0.1); }
+
+/* ── Tool Call (compact block, VS Code Copilot style) ──────────────────── */
+.msg-tool-call {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 2px 4px;
+  margin: 1px 0;
+  border-radius: 3px;
+  border-left: 2px solid var(--border);
+}
+
+.msg-tool-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 2px 4px;
+  margin: 1px 0;
+  border-radius: 3px;
+  border-left: 2px solid var(--border);
+}
+
+.msg-tool-result.msg-tool-err {
+  color: var(--error);
+  border-left-color: var(--error);
+}
+
+.tool-fn {
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.tool-result-icon {
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.tool-result-markdown {
+  flex-basis: 100%;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.tool-result-markdown a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.tool-result-markdown p {
+  margin: 2px 0;
+}
+
+.tool-args-inline {
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
+}
+
+.tool-summary-inline {
+  font-style: italic;
+  opacity: 0.65;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Status Messages ─────────────────────────────────────────────────────── */
+.msg-error {
+  background: rgba(239, 83, 80, 0.08);
+  color: var(--error);
+  border-left: 3px solid var(--error);
+  border-radius: 4px 8px 8px 4px;
+  font-size: 12px;
+}
+
+.msg-warning {
+  background: rgba(255, 183, 77, 0.08);
+  color: var(--warning);
+  border-left: 3px solid var(--warning);
+  border-radius: 4px 8px 8px 4px;
+  font-size: 12px;
+}
+
+.msg-progress {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-style: italic;
+  padding: 4px 8px;
+}
+
+/* ── Typing Indicator ────────────────────────────────────────────────────── */
+.chat-typing {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Input Area (OpenWeb UI pill style) ────────────────────────────────── */
+
+.chat-input-wrapper {
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.chat-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 14px 6px;
+}
+
+/* ── Unified pill container ─────────────────────────────────────────────── */
+
+.chat-input-pill {
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  min-height: 48px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 28px;
+  padding: 4px 4px 4px 18px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-input-pill:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+/* ── Seamless textarea ──────────────────────────────────────────────────── */
+
+.chat-input {
+  flex: 1;
+  min-height: 36px;
+  max-height: 150px;
+  resize: none;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  padding: 5px 0;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  caret-color: var(--accent);
+}
+
+.chat-input::placeholder {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.chat-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Circular pill buttons ──────────────────────────────────────────────── */
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.12s, box-shadow 0.15s;
+  flex-shrink: 0;
+  align-self: center;
+  margin-left: 4px;
+}
+
+.pill-btn:active {
+  transform: scale(0.93);
+}
+
+/* Send button — teal accent circle */
+.pill-btn-send {
+  background: var(--accent);
+  color: #0d1117;
+}
+
+.pill-btn-send.has-text:hover:not(:disabled) {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 10px var(--accent-muted);
+}
+
+.pill-btn-send:disabled {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Stop button — subtle, turns red on hover */
+.pill-btn-stop {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+.pill-btn-stop:hover {
+  background: var(--error);
+  color: #fff;
+}
+
+/* ── "+" button and dropdown menu ──────────────────────────────────────── */
+
+.input-plus-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.input-plus-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.input-plus-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+/* Dropdown menu — pops up above the + button */
+.input-plus-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  min-width: 170px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  animation: plus-menu-in 0.12s ease-out;
+}
+
+@keyframes plus-menu-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.input-plus-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.input-plus-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.input-plus-menu-item svg {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.input-plus-menu-item span:first-of-type {
+  flex: 1;
+}
+
+.input-plus-menu-check {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+  width: 16px;
+  text-align: center;
+}
+
+.input-plus-menu-sep {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 8px;
+}
+
+/* ── Settings Panel (slide-out overlay) ───────────────────────────────── */
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.settings-panel {
+  width: 300px;
+  max-width: 100%;
+  height: 100%;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  animation: slide-in 0.2s ease-out;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.settings-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.settings-close-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.settings-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.settings-field-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.settings-url-row {
+  display: flex;
+  gap: 6px;
+}
+
+.settings-input {
+  flex: 1;
+  height: 34px;
+  padding: 0 10px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.settings-input:focus {
+  border-color: var(--accent);
+}
+
+.settings-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.settings-test-btn {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--accent);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.settings-test-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #0d1117;
+}
+
+.settings-test-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.settings-test-result {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.settings-test-result.ok {
+  color: var(--success);
+}
+
+.settings-test-result.err {
+  color: var(--error);
+}
+
+.settings-footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.settings-save-btn {
+  flex: 1;
+  height: 34px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #0d1117;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.settings-save-btn:hover {
+  background: var(--accent-hover);
+}
+
+.settings-cancel-btn {
+  flex: 1;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.settings-cancel-btn:hover {
+  background: var(--bg-hover);
+}
+
+/* System prompt section */
+.settings-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin: 12px 0 4px;
+}
+
+.settings-hint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+/* Toggle switch for sub-agents */
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.settings-toggle-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border: none;
+  border-radius: 11px;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+  padding: 0;
+}
+
+.settings-toggle.active {
+  background: var(--accent);
+}
+
+.settings-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.settings-toggle.active .settings-toggle-knob {
+  transform: translateX(18px);
+}
+
+/* ── Tool Checklist ───────────────────────────────────────────────── */
+.settings-tools-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.settings-tools-toggle-all {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.settings-tools-toggle-all:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.settings-tools-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.settings-tools-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.settings-tool-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+  position: relative;
+}
+
+.settings-tool-item:hover {
+  background: var(--bg-hover);
+}
+
+.settings-tool-item.checked {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.settings-tool-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+  color: var(--accent);
+}
+
+.settings-tool-item.checked .settings-tool-checkbox {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.settings-tool-name {
+  font-size: 12px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.settings-tool-item.observe-only .settings-tool-name {
+  color: var(--text-secondary);
+}
+
+.settings-tool-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Textarea (system prompt) ──────────────────────────────────────── */
+
+.settings-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: inherit;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.settings-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.settings-prompt-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.settings-prompt-name {
+  flex: 1;
+  min-width: 100px;
+  height: 32px;
+}
+
+.settings-prompt-save-btn {
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #0d1117;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.settings-prompt-save-btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.settings-prompt-save-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.settings-prompt-delete-btn {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--error);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--error);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.settings-prompt-delete-btn:hover {
+  background: rgba(255, 100, 100, 0.1);
+}
+
+.settings-prompt-reset-btn {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.settings-prompt-reset-btn:hover {
+  background: var(--bg-hover);
+}
+
+.settings-prompt-msg {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--text-secondary);
+}
+
+.settings-prompt-msg.ok {
+  color: var(--success);
+}

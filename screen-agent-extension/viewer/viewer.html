@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Files</title>
+<link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+<div class="viewer-split">
+  <aside class="viewer-sidebar">
+    <div class="viewer-sidebar-header">
+      <h2>Files</h2>
+      <span id="file-count" class="viewer-badge">0</span>
+    </div>
+    <button id="refresh-btn" class="viewer-btn">Refresh</button>
+    <ul id="file-list" class="viewer-file-list">
+      <li class="viewer-empty">No files saved yet</li>
+    </ul>
+    <div class="viewer-sidebar-footer">
+      <span id="storage-used">0 KB used</span>
+    </div>
+  </aside>
+  <main class="viewer-main">
+    <div id="viewer-placeholder" class="viewer-placeholder">
+      <div class="viewer-placeholder-icon">📁</div>
+      <p>Select a file from the sidebar to view its contents.</p>
+      <p class="viewer-placeholder-hint">Tip: Ask the agent to "save this as notes.md" to create files.</p>
+    </div>
+    <div id="viewer-content" class="viewer-content" style="display:none">
+      <div class="viewer-toolbar">
+        <h3 id="viewer-filename"></h3>
+        <div class="viewer-toolbar-actions">
+          <button id="view-toggle-btn" class="viewer-btn" style="display:none">Raw</button>
+          <button id="copy-btn" class="viewer-btn">Copy</button>
+          <button id="delete-btn" class="viewer-btn viewer-btn-danger">Delete</button>
+        </div>
+      </div>
+      <div class="viewer-meta">
+        <span id="viewer-size"></span>
+        <span id="viewer-modified"></span>
+      </div>
+      <pre id="viewer-body" class="viewer-body"></pre>
+    </div>
+  </main>
+</div>
+<script src="viewer.bundle.js" type="module"></script>
+</body>
+</html>
