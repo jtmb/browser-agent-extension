@@ -27,7 +27,7 @@ export function buildSystemPrompt(opts = {}) {
 
   const toolInstructions = toolMode
     ? "\n" +
-      "YOUR TOOLS (Playwright MCP):\n" +
+      "YOUR TOOLS (CDP browser automation):\n" +
       "- browser_snapshot() — Capture the accessibility tree of the current page. ALWAYS use this FIRST.\n" +
       "  Elements have ref identifiers (e.g., ref=e42) — use for browser_click, browser_type, etc.\n" +
       "- browser_click(element, ref?, doubleClick?, button?) — Click an element by its ref from the snapshot.\n" +
@@ -340,6 +340,7 @@ export async function* streamMessage(messages, tools, config = {}) {
 
   let toolCalls = [];
   let finishReason = null;
+  let fullReasoning = "";  // Accumulated reasoning_content for tool-call extraction
 
   for await (const chunk of parseSSEStream(response.body, config.signal)) {
     const choice = chunk.choices?.[0];
@@ -350,6 +351,7 @@ export async function* streamMessage(messages, tools, config = {}) {
     // Reasoning content — models like qwen emit chain-of-thought here
     const reasoningDelta = choice.delta?.reasoning_content;
     if (reasoningDelta) {
+      fullReasoning += reasoningDelta;
       yield { type: "reasoning", content: reasoningDelta };
     }
 
@@ -372,6 +374,16 @@ export async function* streamMessage(messages, tools, config = {}) {
     const delta = choice.delta?.content;
     if (delta) {
       yield { type: "delta", content: delta };
+    }
+  }
+
+  // Models like qwen emit tool calls inside reasoning_content as <tool_call> XML
+  // blocks instead of using the OpenAI tool_calls array. Parse them here so the
+  // agent loop sees them as proper tool calls.
+  if (toolCalls.length === 0 && fullReasoning.includes("<tool_call>")) {
+    const extracted = parseToolCallsFromReasoning(fullReasoning);
+    if (extracted.length > 0) {
+      toolCalls = extracted;
     }
   }
 

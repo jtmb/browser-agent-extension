@@ -10,7 +10,7 @@ var DEFAULT_MODEL = "qwen/qwen3.5-9b";
 var DEFAULT_MAX_TOKENS = 16384;
 function buildSystemPrompt(opts = {}) {
   const toolMode = opts.toolMode === true;
-  const toolInstructions = toolMode ? "\nYOUR TOOLS (Playwright MCP):\n- browser_snapshot() \u2014 Capture the accessibility tree of the current page. ALWAYS use this FIRST.\n  Elements have ref identifiers (e.g., ref=e42) \u2014 use for browser_click, browser_type, etc.\n- browser_click(element, ref?, doubleClick?, button?) \u2014 Click an element by its ref from the snapshot.\n- browser_type(element, text, submit?) \u2014 Type text into an element by ref.\n- browser_press_key(key) \u2014 Press a key (Enter, Tab, Escape, ArrowUp, etc.).\n- browser_hover(element) \u2014 Hover over an element by ref.\n- browser_navigate(url) \u2014 Go to a URL.\n- browser_navigate_back() \u2014 Go back to the previous page.\n- browser_wait_for(time?, text?, textGone?) \u2014 Wait for time (seconds).\n- browser_take_screenshot(element?, type?) \u2014 Take a screenshot (visual inspection only).\n- browser_evaluate(function) \u2014 Run JavaScript on the page.\n- browser_fill_form(fields) \u2014 Fill multiple form fields at once.\n- browser_select_option(element, values) \u2014 Select dropdown options.\n- browser_drag(startElement, endElement) \u2014 Drag and drop.\n- browser_handle_dialog(accept, promptText?) \u2014 Accept/dismiss dialogs.\n- browser_tabs(action, index?) \u2014 List, create, close, or select browser tabs.\n- browser_console_messages() \u2014 Get browser console output.\n- browser_network_requests() \u2014 List network requests.\n- web_search(query) \u2014 Search the web (DuckDuckGo).\n- fetch_webpage(url) \u2014 Fetch text from a URL via HTTP.\n- download_file(url, filename?) \u2014 Download a file.\n- write_file(name, content) \u2014 Save data to a persistent file.\n- read_file(name) \u2014 Read a saved file.\n- list_files() \u2014 List saved files.\n- delete_file(name) \u2014 Delete a saved file.\n\nSNAPSHOT RULES:\n- The page snapshot is your eyes. It uses accessibility tree format \u2014 elements have ref identifiers (e.g., ref=e42).\n- Click elements by their ref: browser_click({ element: 'e42' }).\n- If the snapshot doesn't show what you need, call browser_snapshot again.\n- Screenshots (browser_take_screenshot) are for visual inspection only \u2014 you CANNOT click based on screenshots.\n" : "\nYOUR TOOLS (observe-only):\n- browser_snapshot() \u2014 Capture page accessibility tree.\n- browser_take_screenshot() \u2014 Take a screenshot.\n- web_search(query) \u2014 Search the web.\n- fetch_webpage(url) \u2014 Fetch text from a URL.\n- download_file(url) \u2014 Download a file.\n- write_file(name, content) \u2014 Save data.\n- read_file(name) \u2014 Read a saved file.\n- list_files() \u2014 List saved files.\n- delete_file(name) \u2014 Delete a saved file.\n\nYou are in DESCRIBE-ONLY mode. Observe and report \u2014 no clicking, typing, or interacting.\n";
+  const toolInstructions = toolMode ? "\nYOUR TOOLS (CDP browser automation):\n- browser_snapshot() \u2014 Capture the accessibility tree of the current page. ALWAYS use this FIRST.\n  Elements have ref identifiers (e.g., ref=e42) \u2014 use for browser_click, browser_type, etc.\n- browser_click(element, ref?, doubleClick?, button?) \u2014 Click an element by its ref from the snapshot.\n- browser_type(element, text, submit?) \u2014 Type text into an element by ref.\n- browser_press_key(key) \u2014 Press a key (Enter, Tab, Escape, ArrowUp, etc.).\n- browser_hover(element) \u2014 Hover over an element by ref.\n- browser_navigate(url) \u2014 Go to a URL.\n- browser_navigate_back() \u2014 Go back to the previous page.\n- browser_wait_for(time?, text?, textGone?) \u2014 Wait for time (seconds).\n- browser_take_screenshot(element?, type?) \u2014 Take a screenshot (visual inspection only).\n- browser_evaluate(function) \u2014 Run JavaScript on the page.\n- browser_fill_form(fields) \u2014 Fill multiple form fields at once.\n- browser_select_option(element, values) \u2014 Select dropdown options.\n- browser_drag(startElement, endElement) \u2014 Drag and drop.\n- browser_handle_dialog(accept, promptText?) \u2014 Accept/dismiss dialogs.\n- browser_tabs(action, index?) \u2014 List, create, close, or select browser tabs.\n- browser_console_messages() \u2014 Get browser console output.\n- browser_network_requests() \u2014 List network requests.\n- web_search(query) \u2014 Search the web (DuckDuckGo).\n- fetch_webpage(url) \u2014 Fetch text from a URL via HTTP.\n- download_file(url, filename?) \u2014 Download a file.\n- write_file(name, content) \u2014 Save data to a persistent file.\n- read_file(name) \u2014 Read a saved file.\n- list_files() \u2014 List saved files.\n- delete_file(name) \u2014 Delete a saved file.\n\nSNAPSHOT RULES:\n- The page snapshot is your eyes. It uses accessibility tree format \u2014 elements have ref identifiers (e.g., ref=e42).\n- Click elements by their ref: browser_click({ element: 'e42' }).\n- If the snapshot doesn't show what you need, call browser_snapshot again.\n- Screenshots (browser_take_screenshot) are for visual inspection only \u2014 you CANNOT click based on screenshots.\n" : "\nYOUR TOOLS (observe-only):\n- browser_snapshot() \u2014 Capture page accessibility tree.\n- browser_take_screenshot() \u2014 Take a screenshot.\n- web_search(query) \u2014 Search the web.\n- fetch_webpage(url) \u2014 Fetch text from a URL.\n- download_file(url) \u2014 Download a file.\n- write_file(name, content) \u2014 Save data.\n- read_file(name) \u2014 Read a saved file.\n- list_files() \u2014 List saved files.\n- delete_file(name) \u2014 Delete a saved file.\n\nYou are in DESCRIBE-ONLY mode. Observe and report \u2014 no clicking, typing, or interacting.\n";
   const screenContext = `You are a browser automation agent. You can see the user's screen.
 
 Every turn, you receive a page snapshot in accessibility tree format.
@@ -174,12 +174,14 @@ async function* streamMessage(messages, tools, config = {}) {
   }
   let toolCalls = [];
   let finishReason = null;
+  let fullReasoning = "";
   for await (const chunk of parseSSEStream(response.body, config.signal)) {
     const choice = chunk.choices?.[0];
     if (!choice) continue;
     finishReason = choice.finish_reason || finishReason;
     const reasoningDelta = choice.delta?.reasoning_content;
     if (reasoningDelta) {
+      fullReasoning += reasoningDelta;
       yield { type: "reasoning", content: reasoningDelta };
     }
     if (choice.delta?.tool_calls) {
@@ -200,6 +202,12 @@ async function* streamMessage(messages, tools, config = {}) {
     const delta = choice.delta?.content;
     if (delta) {
       yield { type: "delta", content: delta };
+    }
+  }
+  if (toolCalls.length === 0 && fullReasoning.includes("<tool_call>")) {
+    const extracted = parseToolCallsFromReasoning(fullReasoning);
+    if (extracted.length > 0) {
+      toolCalls = extracted;
     }
   }
   if (toolCalls.length > 0) {
@@ -3435,6 +3443,11 @@ function handleCancel(sendResponse) {
   }
 }
 async function attachToTab(tabId) {
+  if (activeDebuggee && activeDebuggee.tabId === tabId) {
+    clearBufferedEvents();
+    log("info", "Debugger already attached to tab", { tabId });
+    return { tabId };
+  }
   if (activeDebuggee && activeDebuggee.tabId !== tabId) {
     try {
       await chrome.debugger.detach(activeDebuggee);

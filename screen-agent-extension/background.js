@@ -223,7 +223,14 @@ function handleCancel(sendResponse) {
  * @returns {Promise<object>} The debuggee object { tabId }
  */
 async function attachToTab(tabId) {
-  // Detach from previous tab if any
+  // Already attached to this tab — skip re-attach, just clear stale buffers
+  if (activeDebuggee && activeDebuggee.tabId === tabId) {
+    clearBufferedEvents();
+    log("info", "Debugger already attached to tab", { tabId });
+    return { tabId };
+  }
+
+  // Detach from previous tab if switching tabs
   if (activeDebuggee && activeDebuggee.tabId !== tabId) {
     try { await chrome.debugger.detach(activeDebuggee); } catch {}
   }
